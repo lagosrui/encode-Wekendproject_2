@@ -1,6 +1,8 @@
+import { Wallet } from "ethers";
 import { ethers } from "hardhat";
 
 const PROPOSALS = ["Proposal 1", "Proposal 2", "Proposal 3"];
+
 
 async function main() {
   //it will give me the argument without the first 2 paths
@@ -34,6 +36,23 @@ async function main() {
       console.log({index, name, proposal});
       
     };
+
+    try {
+      //hardcode an wallet to pass as string, executing the function giveRigthToVote
+      //i am using ether to give me the secound adrees to use 
+      const accounts = await ethers.getSigners();
+      const voter = accounts[1].address;
+
+
+      const passouVotes = await ballotContract.giveRightToVote(voter);
+      await passouVotes.wait();
+      console.log(`Voting right given to ${voter}`);
+    } catch (error) {
+      console.error(`Error giving voting right: ${error}`);
+    }
+
+
+    
 };
 
 main().catch((error) => {
